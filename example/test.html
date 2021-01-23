@@ -1,0 +1,28 @@
+<!--
+ * @Author: xiuquanxu
+ * @Company: kaochong
+ * @Date: 2021-01-23 13:47:16
+ * @LastEditors: xiuquanxu
+ * @LastEditTime: 2021-01-23 14:03:05
+-->
+<html>
+    <meta charset="utf-8">
+    <body>
+        <canvas style="border: 1px soild red;" id="canvas" height="400" width="400"></canvas>
+    </body>
+    <script>
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        ctx.save();
+        ctx.beginPath();
+
+        ctx.font = '48px serif';
+        ctx.fillText('Hi!', 150, 50);
+        ctx.direction = 'rtl';
+        ctx.fillText('Hi!', 150, 130);
+        ctx.restore();
+        ctx.closePath();
+        ctx.moveTo(0,0);
+        ctx.clearRect(0, 0, 150, 150);
+    </script>
+</html>

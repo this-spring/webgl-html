@@ -1,0 +1,47 @@
+<!--
+ * @Author: xiuquanxu
+ * @Company: kaochong
+ * @Date: 2021-01-23 12:14:29
+ * @LastEditors: xiuquanxu
+ * @LastEditTime: 2021-01-23 14:33:31
+-->
+<html>
+    <meta charset="utf-8"/>
+    <body>
+        <canvas id="webgl" height="800" width="800">
+            not support canvas
+        </canvas>
+    </body>
+    <script src="./gl-html.js"></script>
+    <script>
+        // todo moc fetch data
+        var data = {
+            name: {
+                value: 'xxq',
+                x: 10,
+                y: 10
+            },
+            age: {
+                value: '25',
+                x: 100,
+                y: 100
+            }
+        };
+        var gh = new GlHtml({
+            el: 'webgl',
+            data,
+        });
+        setTimeout(() => {
+            gh.p.name = {
+                value: 'xxx', 
+                x: 30,
+                y: 30
+            }
+            // gh.p.age = {
+            //     value: '100',
+            //     x: 130,
+            //     y: 130,
+            // };
+        }, 1.5 * 1000);
+    </script>
+</html>
