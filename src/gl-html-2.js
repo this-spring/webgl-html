@@ -3,7 +3,7 @@
  * @Company: kaochong
  * @Date: 2021-02-18 21:40:17
  * @LastEditors: xiuquanxu
- * @LastEditTime: 2021-02-24 19:53:17
+ * @LastEditTime: 2021-02-25 00:51:09
 */
 const TaskType = {
     point: 'point',
@@ -43,10 +43,14 @@ class GlHtml {
     }
 
     _doTask() {
-        for (let i = 0; i < this.task.length; i += 1) {
-            const item = this.task[i];
-            this.doMap.get(item.type)(item.value);
-        }
+        // for (let i = 0; i < this.task.length; i += 1) {
+        //     const item = this.task[i];
+        //     this.doMap.get(item.type)(item.value);
+        // }
+        window.clearTimeout(window.tid);
+        window.tid = setTimeout(() => {
+            this._drawPoints();
+        }, 0);
     }
 
     _init() {
@@ -62,11 +66,37 @@ class GlHtml {
         this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT);
         this.attribute.a_Position = this.gl.getAttribLocation(this.gl.program, 'a_Position');
-        this.attribute.a_PointSize = this.gl.getAttribLocation(this.gl.program, 'a_PointSize');
-        this.uniform.u_FragColor = this.gl.getUniformLocation(this.gl.program, 'u_FragColor');
-        if (!this.uniform.u_FragColor) {
-            console.error('u_FragColor error');
+        // this.attribute.a_PointSize = this.gl.getAttribLocation(this.gl.program, 'a_PointSize');
+        // this.uniform.u_FragColor = this.gl.getUniformLocation(this.gl.program, 'u_FragColor');
+        // if (!this.uniform.u_FragColor) {
+        //     console.error('u_FragColor error');
+        // }
+    }
+
+    _drawPoints() {
+        const n = this._initVertexBuffer();
+        this.gl.drawArrays(gl.POINTS, 0, n);
+    }
+
+    _initVertexBuffer() {
+        const vertexArr = [];
+        for (let i = 0; i < this.task.length; i += 1) {
+            const item = this.task[i].value;
+            const v = this._transformPosition(item.x, item.y);
+            vertexArr.push(v.x);
+            vertexArr.push(v.y);
         }
+        const fvertexArr = new Float32Array(vertexArr);
+        const vertexBuffer = this.gl.createBuffer();
+        if (!vertexBuffer) {
+            console.log("fail to create buffer");
+            return -1;
+        }
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, vertexBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, fvertexArr, this.gl.STATIC_DRAW);
+        this.gl.vertexAttribPointer(this.attribute.a_Position, 2, this.gl.FLOAT, false, 0, 0);
+        this.gl.enableVertexAttribArray(this.attribute.a_Position);
+        return fvertexArr.length / 2;
     }
 
     _drawPoint(value) {
@@ -90,10 +120,9 @@ class GlHtml {
     _getVetexShader() {
         const VetexShader = `
             attribute vec4 a_Position;
-            attribute float a_PointSize;
             void main() {
                 gl_Position = a_Position;
-                gl_PointSize = a_PointSize;
+                gl_PointSize = 10.0;
             }
         `;
         return VetexShader;
@@ -104,7 +133,7 @@ class GlHtml {
             precision mediump float;
             uniform vec4 u_FragColor;
             void main() {
-                gl_FragColor = u_FragColor;
+                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
             }
         `;
         return FragmentShader;
