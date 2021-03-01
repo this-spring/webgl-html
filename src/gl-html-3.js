@@ -3,10 +3,11 @@
  * @Company: kaochong
  * @Date: 2021-02-18 21:40:17
  * @LastEditors: xiuquanxu
- * @LastEditTime: 2021-02-25 23:20:27
+ * @LastEditTime: 2021-02-25 12:37:03
 */
 const TaskType = {
     point: 'point',
+    triangle: 'triangle',
 }
 class GlHtml {
     constructor(opt) {
@@ -39,6 +40,14 @@ class GlHtml {
         this._doTask();
     }
 
+    drawTriangles(opt) {
+        this.task.push({
+            type: TaskType.point,
+            value: opt
+        });
+        this._doTask(); 
+    }
+
     fillRect() {
     }
 
@@ -49,12 +58,13 @@ class GlHtml {
         // }
         window.clearTimeout(window.tid);
         window.tid = setTimeout(() => {
-            this._drawPoints();
+            this._drawTriangles();
         }, 0);
     }
 
     _init() {
         this.doMap.set(TaskType.point, this._drawPoint.bind(this));
+        this.doMap.set(TaskType.triangle, this._drawTriangles.bind(this));
         this.left = this.rect.left;
         this.right = this.rect.right;
         this.width = this.canvas.width;
@@ -66,7 +76,6 @@ class GlHtml {
         this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT);
         this.attribute.a_Position = this.gl.getAttribLocation(this.gl.program, 'a_Position');
-        this.attribute.a_PointSize = this.gl.getAttribLocation(this.gl.program, 'a_PointSize');
         // this.attribute.a_PointSize = this.gl.getAttribLocation(this.gl.program, 'a_PointSize');
         // this.uniform.u_FragColor = this.gl.getUniformLocation(this.gl.program, 'u_FragColor');
         // if (!this.uniform.u_FragColor) {
@@ -74,25 +83,32 @@ class GlHtml {
         // }
     }
 
+    _drawTriangles() {
+        const n = this._initVertexBuffer();
+        this.gl.drawArrays(this.gl.TRIANGLES, 0, n);
+    }
+
     _drawPoints() {
         const n = this._initVertexBuffer();
-        this.gl.drawArrays(gl.POINTS, 0, n);
+        this.gl.drawArrays(this.gl.POINTS, 0, n);
     }
 
     _initVertexBuffer() {
         const vertexArr = [];
-        const pointArr = [];
         for (let i = 0; i < this.task.length; i += 1) {
             const item = this.task[i].value;
-            const v = this._transformPosition(item.x, item.y);
-            vertexArr.push(v.x);
-            vertexArr.push(v.y);
-            pointArr.push(item.size);
+            const p1 = this._transformPosition(item.p1.x, item.p1.y);
+            vertexArr.push(p1.x);
+            vertexArr.push(p1.y);
+            const p2 = this._transformPosition(item.p2.x, item.p2.y);
+            vertexArr.push(p2.x);
+            vertexArr.push(p2.y);
+            const p3 = this._transformPosition(item.p3.x, item.p3.y);
+            vertexArr.push(p3.x);
+            vertexArr.push(p3.y);
         }
         const fvertexArr = new Float32Array(vertexArr);
-        const fsizeArr = new Float32Array(pointArr);
         const vertexBuffer = this.gl.createBuffer();
-        const vertexBufferPoint = this.gl.createBuffer();
         if (!vertexBuffer) {
             console.log("fail to create buffer");
             return -1;
@@ -101,11 +117,6 @@ class GlHtml {
         this.gl.bufferData(this.gl.ARRAY_BUFFER, fvertexArr, this.gl.STATIC_DRAW);
         this.gl.vertexAttribPointer(this.attribute.a_Position, 2, this.gl.FLOAT, false, 0, 0);
         this.gl.enableVertexAttribArray(this.attribute.a_Position);
-        // 
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, vertexBufferPoint);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, fsizeArr, this.gl.STATIC_DRAW);
-        this.gl.vertexAttribPointer(this.attribute.a_PointSize, 1, this.gl.FLOAT, false, 0, 0);
-        this.gl.enableVertexAttribArray(this.attribute.a_PointSize);
         return fvertexArr.length / 2;
     }
 
@@ -130,10 +141,8 @@ class GlHtml {
     _getVetexShader() {
         const VetexShader = `
             attribute vec4 a_Position;
-            attribute float a_PointSize;
             void main() {
                 gl_Position = a_Position;
-                gl_PointSize = a_PointSize;
             }
         `;
         return VetexShader;
