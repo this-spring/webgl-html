@@ -1,0 +1,56 @@
+<!--
+ * @Author: xiuquanxu
+ * @Company: kaochong
+ * @Date: 2021-02-18 21:39:46
+ * @LastEditors: xiuquanxu
+ * @LastEditTime: 2021-03-03 01:21:21
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .contanier {
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+    <div class="contanier">
+        <canvas id="webgl" width="800" height="800"></canvas>
+    </div>
+</body>
+</html>
+<script src="./lib/webgl-utils.js"></script>
+<script src="./lib/webgl-debug.js"></script>
+<script src="./lib/cuon-utils.js"></script>
+<!-- <script src="./gl-html.js"></script> -->
+<script src="./gl-html.js"></script>
+<script type="text/javascript">
+// 先使用webgl画出图形，然后在开始做响应式，最后在做布局
+var gl = new GlHtml({
+    id: 'webgl',
+});
+// webgl坐标系x[-1,1]
+// y[-1, 1]
+gl.fillRect({
+    x: 25,
+    y: 25,
+    width: 200,
+    height: 200,
+});
+gl.drawCircle({
+    x: 100,
+    y: 100,
+    r: 50,
+    color: {
+        r: 1.0,
+        g: 0.0,
+        b: 0.0,
+        a: 1.0
+    }
+});
+</script>
