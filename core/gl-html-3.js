@@ -3,7 +3,7 @@
  * @Company: kaochong
  * @Date: 2021-03-03 23:56:21
  * @LastEditors: xiuquanxu
- * @LastEditTime: 2021-03-03 23:56:21
+ * @LastEditTime: 2021-03-04 00:58:46
  */
 /*
  * @Author: xiuquanxu
@@ -20,7 +20,7 @@
  * @LastEditTime: 2021-02-24 19:53:17
 */
 const TaskType = {
-    circle: 'circle',
+    kx: 'kx',
 }
 class GlHtml {
     constructor(opt) {
@@ -45,38 +45,38 @@ class GlHtml {
         this._init();
     }
 
-    drawCircle(opt) {
-        this.task.push({
-            type: TaskType.circle,
-            value: opt
-        });
-        this._doTask();
+    drawKx(k, b) {
+        this._doTask(k, b);
     }
 
     fillRect() {
     }
 
-    _doTask() {
-       this._drawCircle();
+    _doTask(k, b) {
+       this._drawKx(k, b);
     }
 
-    _drawCircle() {
-        const value = this.task[0].value;
-        const { x, y, r, color } = value;
-        let rr = this._transformLen(r);
-        // let vv = this._transformPosition(value.x, value.y);
-        let vertexArr = [];
-        vertexArr.push(0.0, 0.0);
-        for (let i = 0; i < 10000; i += 1) {
-            let t = 360 / 100 * i;
-            let xx = rr * Math.sin(t);
-            let yy = rr * Math.cos(t);
-            vertexArr.push(xx, yy);
+    _drawKx(k, b) {
+        const count = 100000;
+        const res = [];
+        let x = -1;
+        let eachLen = 2 / count;
+        let bb = 2 * b  / this.width;
+        for (let i = 0; i < count; i += 1) {
+            x += eachLen * i;
+            let y = k * x;
+            if (bb >= 0) {
+                res.push(x, y + bb);
+            } else {
+                res.push(x, y - bb);
+            }
+            x = -1;
         }
+        console.log(res);
         const buffer = this._createBuffer();
-        const n = this._configVertex(buffer, new Float32Array(vertexArr), this.attribute.a_Position,
+        const n = this._configVertex(buffer, new Float32Array(res), this.attribute.a_Position,
         2, 0, 2);
-        this.gl.drawArrays(this.gl.TRIANGLE_FAN, 0, n);
+        this.gl.drawArrays(this.gl.LINES, 0, n);
     }
 
     _init() {
@@ -130,6 +130,7 @@ class GlHtml {
             attribute vec4 a_Position;
             void main() {
                 gl_Position = a_Position;
+                gl_PointSize = 10.0;
             }
         `;
         return VetexShader;

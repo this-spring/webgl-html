@@ -1,16 +1,9 @@
 /*
  * @Author: xiuquanxu
  * @Company: kaochong
- * @Date: 2021-03-03 23:56:21
- * @LastEditors: xiuquanxu
- * @LastEditTime: 2021-03-03 23:56:21
- */
-/*
- * @Author: xiuquanxu
- * @Company: kaochong
  * @Date: 2021-03-03 00:53:16
  * @LastEditors: xiuquanxu
- * @LastEditTime: 2021-03-03 01:23:00
+ * @LastEditTime: 2021-03-04 00:38:47
 */
 /*
  * @Author: xiuquanxu
@@ -20,7 +13,7 @@
  * @LastEditTime: 2021-02-24 19:53:17
 */
 const TaskType = {
-    circle: 'circle',
+    sin: 'sin',
 }
 class GlHtml {
     constructor(opt) {
@@ -45,9 +38,9 @@ class GlHtml {
         this._init();
     }
 
-    drawCircle(opt) {
+    drawSin(opt) {
         this.task.push({
-            type: TaskType.circle,
+            type: TaskType.sin,
             value: opt
         });
         this._doTask();
@@ -57,26 +50,30 @@ class GlHtml {
     }
 
     _doTask() {
-       this._drawCircle();
+       this._drawSin();
     }
 
-    _drawCircle() {
-        const value = this.task[0].value;
-        const { x, y, r, color } = value;
-        let rr = this._transformLen(r);
-        // let vv = this._transformPosition(value.x, value.y);
-        let vertexArr = [];
-        vertexArr.push(0.0, 0.0);
-        for (let i = 0; i < 10000; i += 1) {
-            let t = 360 / 100 * i;
-            let xx = rr * Math.sin(t);
-            let yy = rr * Math.cos(t);
-            vertexArr.push(xx, yy);
+    _drawSin() {
+        const cout = 100000;
+        const startX = 20;
+        const endX = 60;
+        const res = [];
+        let x = startX;
+        for (let i = 0; i < cout; i += 1) {
+            x += (endX - startX) / cout * i;
+            let y = Math.sin(x);
+            if (y > 0) {
+                let v = this._transformPosition(x, 40 -y);
+                res.push(v.x, v.y);
+            } else {
+                let v = this._transformPosition(x, 40 + y);
+               res.push(v.x, v.y); 
+            }
         }
         const buffer = this._createBuffer();
-        const n = this._configVertex(buffer, new Float32Array(vertexArr), this.attribute.a_Position,
+        const n = this._configVertex(buffer, new Float32Array(res), this.attribute.a_Position,
         2, 0, 2);
-        this.gl.drawArrays(this.gl.TRIANGLE_FAN, 0, n);
+        this.gl.drawArrays(this.gl.LINES, 0, n);
     }
 
     _init() {
