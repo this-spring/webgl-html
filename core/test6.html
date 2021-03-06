@@ -3,7 +3,7 @@
  * @Company: kaochong
  * @Date: 2021-02-18 21:39:46
  * @LastEditors: xiuquanxu
- * @LastEditTime: 2021-03-05 13:28:26
+ * @LastEditTime: 2021-03-06 20:24:57
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -28,23 +28,27 @@
 <script src="./lib/webgl-debug.js"></script>
 <script src="./lib/cuon-utils.js"></script>
 <!-- <script src="./gl-html.js"></script> -->
-<script src="./gl-html-3.js"></script>
+<script src="./gl-html-6.js"></script>
 <script type="text/javascript">
 // 先使用webgl画出图形，然后在开始做响应式，最后在做布局
 var gl = new GlHtml({
     id: 'webgl',
 });
-// webgl坐标系x[-1,1]
-// y[-1, 1]
-gl.fillRect({
-    x: 25,
-    y: 25,
-    width: 200,
-    height: 200,
+fetch('./otest.yuv').then(res => res.arrayBuffer()).then((res) => {
+    const width = 472;
+    const height = 472;
+    console.log(width * height * 1.5, res.byteLength);
+    const yuvData = new Uint8Array(res);
+    const yData = yuvData.subarray(0, width * height);
+    const uData = yuvData.subarray(width * height, width * height * 1.25);
+    const vData = yuvData.subarray(width * height * 1.25, width * height * 1.5);
+
+    gl.drawImgByYuv({
+        width,
+        height,
+        yData,
+        uData,
+        vData,
+    });
 });
-gl.drawKx(2, 0);
-gl.drawKx(1, 0);
-setTimeout(() => {
-    gl.drawKx(1, 0);
-}, 1 * 100);
 </script>

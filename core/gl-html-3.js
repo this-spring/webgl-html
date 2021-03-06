@@ -3,7 +3,7 @@
  * @Company: kaochong
  * @Date: 2021-03-03 23:56:21
  * @LastEditors: xiuquanxu
- * @LastEditTime: 2021-03-04 00:58:46
+ * @LastEditTime: 2021-03-05 13:27:20
  */
 /*
  * @Author: xiuquanxu
@@ -76,7 +76,7 @@ class GlHtml {
         const buffer = this._createBuffer();
         const n = this._configVertex(buffer, new Float32Array(res), this.attribute.a_Position,
         2, 0, 2);
-        this.gl.drawArrays(this.gl.LINES, 0, n);
+        this.gl.drawArrays(this.gl.LINE_STRIP, 0, n);
     }
 
     _init() {
