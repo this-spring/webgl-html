@@ -101,7 +101,7 @@ function loadShader(gl, type, source) {
  */
 function getWebGLContext(canvas, opt_debug) {
   // Get the rendering context for WebGL
-  var gl = WebGLUtils.setupWebGL(canvas);
+  var gl = WebGLUtils.setupWebGL(canvas,{preserveDrawingBuffer:true});
   if (!gl) return null;
 
   // if opt_debug is explicitly false, create the context for debugging

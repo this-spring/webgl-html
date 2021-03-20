@@ -3,7 +3,7 @@
  * @Company: kaochong
  * @Date: 2021-02-18 21:39:46
  * @LastEditors: xiuquanxu
- * @LastEditTime: 2021-03-04 00:37:02
+ * @LastEditTime: 2021-03-18 19:17:08
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -34,14 +34,6 @@
 var gl = new GlHtml({
     id: 'webgl',
 });
-// webgl坐标系x[-1,1]
-// y[-1, 1]
-gl.fillRect({
-    x: 25,
-    y: 25,
-    width: 200,
-    height: 200,
-});
 gl.drawCircle({
     x: 100,
     y: 100,
@@ -53,4 +45,17 @@ gl.drawCircle({
         a: 1.0
     }
 });
+setTimeout(() => {
+    gl.drawCircle({
+        x: 300,
+        y: 300,
+        r: 50,
+        color: {
+            r: 1.0,
+            g: 0.0,
+            b: 0.0,
+            a: 1.0
+        }
+    });
+}, 2 * 1000);
 </script>

@@ -3,7 +3,7 @@
  * @Company: kaochong
  * @Date: 2021-02-18 21:39:46
  * @LastEditors: xiuquanxu
- * @LastEditTime: 2021-03-05 13:28:26
+ * @LastEditTime: 2021-03-18 19:48:09
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -36,15 +36,9 @@ var gl = new GlHtml({
 });
 // webgl坐标系x[-1,1]
 // y[-1, 1]
-gl.fillRect({
-    x: 25,
-    y: 25,
-    width: 200,
-    height: 200,
-});
+
 gl.drawKx(2, 0);
-gl.drawKx(1, 0);
 setTimeout(() => {
     gl.drawKx(1, 0);
-}, 1 * 100);
+}, 5 * 1000);
 </script>

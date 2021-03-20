@@ -3,7 +3,7 @@
  * @Company: kaochong
  * @Date: 2021-03-03 23:56:21
  * @LastEditors: xiuquanxu
- * @LastEditTime: 2021-03-03 23:56:21
+ * @LastEditTime: 2021-03-18 19:18:41
  */
 /*
  * @Author: xiuquanxu
@@ -64,7 +64,6 @@ class GlHtml {
         const value = this.task[0].value;
         const { x, y, r, color } = value;
         let rr = this._transformLen(r);
-        // let vv = this._transformPosition(value.x, value.y);
         let vertexArr = [];
         vertexArr.push(0.0, 0.0);
         for (let i = 0; i < 10000; i += 1) {
